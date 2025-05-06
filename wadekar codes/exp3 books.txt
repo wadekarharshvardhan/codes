@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct Node {
+    string name;
+    vector<Node*> children;
+    Node(string n) : name(n) {}
+};
+
+void print(Node* root, int d = 0) {
+    if (!root) return;
+    cout << string(d*2, ' ') << root->name << "\n";
+    for (auto c : root->children) print(c, d+1);
+}
+
+int main() {
+    Node* book = new Node("Book");
+    int c; cout << "Chapters: "; cin >> c;
+    while (c--) {
+        string cname; cout << "Chapter name: "; cin >> cname;
+        Node* ch = new Node(cname);
+        int s; cout << "Sections: "; cin >> s;
+        while (s--) {
+            string sname; cout << "Section name: "; cin >> sname;
+            Node* sec = new Node(sname);
+            int ss; cout << "Subsections: "; cin >> ss;
+            while (ss--) {
+                string ssname; cout << "Subsection name: "; cin >> ssname;
+                sec->children.push_back(new Node(ssname));
+            }
+            ch->children.push_back(sec);
+        }
+        book->children.push_back(ch);
+    }
+    cout << "\nBook Tree:\n"; print(book);
+}

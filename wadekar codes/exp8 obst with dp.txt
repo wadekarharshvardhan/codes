@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter number of keys: ";
+    cin >> n;
+    vector<int> keys(n), p(n);
+    cout << "Enter keys (sorted): ";
+    for (int& k : keys) cin >> k;
+    cout << "Enter search probabilities: ";
+    for (int& x : p) cin >> x;
+
+    vector<vector<int>> cost(n, vector<int>(n));
+    vector<vector<int>> sum(n, vector<int>(n));
+
+    for (int i = 0; i < n; i++) {
+        cost[i][i] = p[i];
+        sum[i][i] = p[i];
+    }
+
+    for (int l = 2; l <= n; l++) {
+        for (int i = 0; i <= n - l; i++) {
+            int j = i + l - 1;
+            cost[i][j] = 1e9;
+            sum[i][j] = sum[i][j - 1] + p[j];
+            for (int r = i; r <= j; r++) {
+                int c = (r > i ? cost[i][r - 1] : 0) + (r < j ? cost[r + 1][j] : 0) + sum[i][j];
+                cost[i][j] = min(cost[i][j], c);
+            }
+        }
+    }
+
+    cout << "Minimum cost of Optimal BST: " << cost[0][n - 1];
+}

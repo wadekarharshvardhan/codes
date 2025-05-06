@@ -1,0 +1,53 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node *left, *right;
+    bool rthread;
+    Node(int d) : data(d), left(NULL), right(NULL), rthread(false) {}
+};
+
+Node* insert(Node* root, int val) {
+    if (!root) return new Node(val);
+    if (val < root->data) root->left = insert(root->left, val);
+    else root->right = insert(root->right, val);
+    return root;
+}
+
+void createThreads(Node* root, Node*& prev) {
+    if (!root) return;
+    createThreads(root->left, prev);
+    if (!root->right) {
+        root->right = prev;
+        root->rthread = true;
+    }
+    prev = root;
+    createThreads(root->right, prev);
+}
+
+void inorderThreaded(Node* root) {
+    Node* cur = root;
+    while (cur && cur->left) cur = cur->left;
+    while (cur) {
+        cout << cur->data << " ";
+        if (cur->rthread) cur = cur->right;
+        else {
+            cur = cur->right;
+            while (cur && cur->left) cur = cur->left;
+        }
+    }
+}
+
+int main() {
+    Node* root = NULL;
+    int n, x;
+    cout << "Nodes: "; cin >> n;
+    while (n--) {
+        cin >> x;
+        root = insert(root, x);
+    }
+    Node* prev = NULL;
+    createThreads(root, prev);
+    cout << "Threaded Inorder: "; inorderThreaded(root);
+}

@@ -1,0 +1,23 @@
+#include <iostream>
+#include <map>
+#include <vector>
+using namespace std;
+
+map<string, vector<pair<string, int>>> graph;
+
+int main() {
+    int e;
+    cout << "Enter number of flights: "; cin >> e;
+    string a, b; int cost;
+    while (e--) {
+        cin >> a >> b >> cost;
+        graph[a].push_back({b, cost});
+    }
+
+    for (auto& [city, flights] : graph) {
+        cout << city << " -> ";
+        for (auto& [dest, c] : flights)
+            cout << "(" << dest << ", " << c << ") ";
+        cout << "\n";
+    }
+}

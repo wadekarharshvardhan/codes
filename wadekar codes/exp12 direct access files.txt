@@ -1,0 +1,61 @@
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
+
+struct Student {
+    int rollNo;
+    char name[50];
+};
+
+void insertRecord(int index) {
+    fstream file("students.dat", ios::in | ios::out | ios::binary);
+    Student s;
+    cout << "Enter roll number: "; cin >> s.rollNo;
+    cin.ignore(); 
+    cout << "Enter name: "; cin.getline(s.name, 50);
+    file.seekp(index * sizeof(Student), ios::beg);
+    file.write(reinterpret_cast<char*>(&s), sizeof(s));
+    file.close();
+}
+
+void deleteRecord(int index) {
+    fstream file("students.dat", ios::in | ios::out | ios::binary);
+    Student s = {0};  // Empty record for deletion
+    file.seekp(index * sizeof(Student), ios::beg);
+    file.write(reinterpret_cast<char*>(&s), sizeof(s));
+    file.close();
+}
+
+void displayRecord(int index) {
+    ifstream file("students.dat", ios::binary);
+    Student s;
+    file.seekg(index * sizeof(Student), ios::beg);
+    file.read(reinterpret_cast<char*>(&s), sizeof(s));
+    if (s.rollNo != 0)  // Checking if it's a valid record
+        cout << "Roll No: " << s.rollNo << "\nName: " << s.name << endl;
+    else
+        cout << "Record not found.\n";
+    file.close();
+}
+
+int main() {
+    int choice, index;
+    while (true) {
+        cout << "\n1. Insert Record\n2. Delete Record\n3. Display Record\n4. Exit\nEnter your choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1: 
+                cout << "Enter index for insertion: "; cin >> index;
+                insertRecord(index); break;
+            case 2: 
+                cout << "Enter index for deletion: "; cin >> index;
+                deleteRecord(index); break;
+            case 3: 
+                cout << "Enter index to display: "; cin >> index;
+                displayRecord(index); break;
+            case 4: return 0;
+            default: cout << "Invalid choice.\n"; break;
+        }
+    }
+}

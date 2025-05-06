@@ -1,0 +1,23 @@
+-----------------------------------------------------sudo admin-----------------------------------------------------------
+
+sudo -i
+
+
+
+sudo journalctl -k | grep usb
+
+sudo journalctl --rotate
+
+sudo journalctl --vacuum-time=1s
+
+sudo journalctl -k | grep usb
+
+history -c
+
+
+------------------------------------------------------other commands----------------------------------------------------
+
+
+dmesg -t
+
+sudo dmesg --clear 

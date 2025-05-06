@@ -1,0 +1,30 @@
+def h(k, s): return k % s
+
+s = 7
+lp_keys = [None]*s
+lp_vals = [None]*s
+ch = [[] for _ in range(s)]
+
+n = int(input("Enter number of clients: "))
+for _ in range(n):
+    k = int(input("Key: "))
+    v = input("Phone: ")
+    i = h(k, s)
+    while lp_keys[i] is not None: i = (i+1)%s
+    lp_keys[i], lp_vals[i] = k, v
+    ch[h(k, s)].append((k, v))
+
+print("Search keys:")
+for _ in range(n):
+    k = int(input("Key to search: "))
+    # Linear Probing Search
+    i, c1 = h(k, s), 1
+    while lp_keys[i] != k:
+        if lp_keys[i] is None: break
+        i, c1 = (i+1)%s, c1+1
+    # Chaining Search
+    c2 = 0
+    for x in ch[h(k, s)]:
+        c2 += 1
+        if x[0] == k: break
+    print(f"Key {k} -> LP: {c1} comps, Chaining: {c2} comps")

@@ -1,0 +1,41 @@
+#include <iostream>
+#include <map>
+#include <vector>
+#include <queue>
+#include <set>
+using namespace std;
+
+map<string, vector<string>> g;
+
+void dfs(string u, set<string>& vis) {
+    vis.insert(u); cout << u << " ";
+    for (auto v : g[u])
+        if (!vis.count(v)) dfs(v, vis);
+}
+
+void bfs(string start) {
+    set<string> vis;
+    queue<string> q;
+    q.push(start); vis.insert(start);
+    while (!q.empty()) {
+        string u = q.front(); q.pop();
+        cout << u << " ";
+        for (auto v : g[u])
+            if (!vis.count(v)) { vis.insert(v); q.push(v); }
+    }
+}
+
+int main() {
+    int e;
+    cout << "Enter number of roads (edges): "; cin >> e;
+    string u, v;
+    while (e--) {
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u); // undirected
+    }
+    string start;
+    cout << "Start from: "; cin >> start;
+    cout << "DFS: "; set<string> vis; dfs(start, vis);
+    cout << "\nBFS: "; bfs(start);
+}

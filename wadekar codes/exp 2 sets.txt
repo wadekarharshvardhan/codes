@@ -1,0 +1,25 @@
+class SetADT:
+    def __init__(self): self.s = set()
+    def add(self, x): self.s.add(x)
+    def remove(self, x): self.s.discard(x)
+    def contains(self, x): return x in self.s
+    def size(self): return len(self.s)
+    def iterator(self): return iter(self.s)
+    def inter(self, other): return self.s & other.s
+    def union(self, other): return self.s | other.s
+    def diff(self, other): return self.s - other.s
+    def subset(self, other): return self.s <= other.s
+
+# Input
+A, B = SetADT(), SetADT()
+print("Enter elements for Set A:"); A.s = set(map(int, input().split()))
+print("Enter elements for Set B:"); B.s = set(map(int, input().split()))
+
+# Demo operations
+print("A contains 3?", A.contains(3))
+print("Size of A:", A.size())
+print("Iterator over A:", list(A.iterator()))
+print("A ∩ B:", A.inter(B))
+print("A ∪ B:", A.union(B))
+print("A - B:", A.diff(B))
+print("A ⊆ B?", A.subset(B))
